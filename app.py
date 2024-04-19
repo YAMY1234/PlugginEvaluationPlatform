@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, send_file
+from flask_socketio import SocketIO, send
 import io
 
 
@@ -16,6 +17,8 @@ import io
 '''
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secret!'
+socketio = SocketIO(app)
 
 @app.route('/')
 def home():
@@ -73,5 +76,15 @@ def track():
     gif_bytes = b'GIF89a\x01\x00\x01\x00\x80\x01\x00\x00\x00\x00\xff\xff\xff!\xf9\x04\x01\x00\x00\x01\x00,\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02L\x01\x00;'
     return send_file(io.BytesIO(gif_bytes), mimetype='image/gif')
 
+# @socketio.on('message')
+# def handle_message(msg):
+#     print('Received message:', msg)
+#     send(msg, broadcast=True)
+    
+# @app.route('/websocket')
+# def websocket():
+#     return render_template('websocket.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
+    # socketio.run(app, debug=True)
