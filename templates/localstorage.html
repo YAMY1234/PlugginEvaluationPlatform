@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LocalStorage Tracking Test</title>
+</head>
+<body>
+    <h1>LocalStorage Tracking Test</h1>
+    <div id="localStorageStatus"></div>
+    <script>
+        // 尝试在LocalStorage中存储一些信息
+        localStorage.setItem('testData', 'This is test data.');
+
+        // 尝试读取LocalStorage中的信息
+        function readLocalStorage() {
+            var data = localStorage.getItem('testData');
+            var statusDiv = document.getElementById('localStorageStatus');
+            if (data) {
+                statusDiv.innerText = "LocalStorage data found: " + data;
+            } else {
+                statusDiv.innerText = "LocalStorage data not found. It may have been blocked or not set.";
+            }
+        }
+
+        readLocalStorage();
+    </script>
+</body>
+</html>

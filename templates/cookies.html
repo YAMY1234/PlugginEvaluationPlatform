@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cookies Tracking Test</title>
+</head>
+<body>
+    <h1>Cookies Tracking Test</h1>
+    <div id="cookieStatus"></div>
+    <script>
+        // 尝试设置一个Cookie
+        var d = new Date();
+        d.setTime(d.getTime() + (24*60*60*1000)); // Cookie的有效期为1天
+        var expires = "expires="+ d.toUTCString();
+        document.cookie = "testCookie=12345;" + expires + ";path=/";
+
+        // 读取Cookie
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0;i < ca.length;i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        }
+
+        // 检查Cookie是否存在并更新页面显示状态
+        var statusDiv = document.getElementById('cookieStatus');
+        var testCookie = getCookie('testCookie');
+        if (testCookie) {
+            statusDiv.innerText = "Cookie 'testCookie' detected: " + testCookie;
+        } else {
+            statusDiv.innerText = "Cookie 'testCookie' not found. It may have been blocked or not set.";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SessionStorage Tracking Test</title>
+</head>
+<body>
+    <h1>SessionStorage Tracking Test</h1>
+    <div id="sessionStorageStatus"></div>
+    <script>
+        // 尝试在SessionStorage中存储一些信息
+        sessionStorage.setItem('sessionData', 'This is session data.');
+
+        // 尝试读取SessionStorage中的信息
+        function readSessionStorage() {
+            var data = sessionStorage.getItem('sessionData');
+            var statusDiv = document.getElementById('sessionStorageStatus');
+            if (data) {
+                statusDiv.innerText = "SessionStorage data found: " + data;
+            } else {
+                statusDiv.innerText = "SessionStorage data not found. It may have been blocked or not set.";
+            }
+        }
+
+        readSessionStorage();
+    </script>
+</body>
+</html>
