@@ -57,6 +57,10 @@ def canvas_fingerprint():
 def web_beacons():
     return render_template('web-beacons.html')
 
+@app.route('/canvas-fingerprint')
+def canvas_fingerprint():
+    return render_template('canvas-fingerprinting.html')
+
 @app.route('/user-agent')
 def user_agent():
     user_agent = request.headers.get('User-Agent')
