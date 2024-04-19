@@ -3,6 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>HTTP Header Tracking Test</title>
+    <script>
+      // 准备发送到服务器的数据，包括用户代理和语言信息
+      function prepareAndSendTrackingData() {
+        const trackingData = {
+          userAgent: navigator.userAgent, // 用户代理字符串
+          language: navigator.language, // 用户的浏览器语言设置
+        };
+
+        // 伪造的第三方服务器地址列表
+        const thirdPartyServers = [
+          'https://google.com',
+          'https://baidu.com',
+          'https://www.facebook.com',
+          'https://www.instagram.com',
+          'https://www.twitter.com',
+          'https://www.linkedin.com',
+          'https://www.youtube.com',
+          'https://www.pinterest.com',
+          'https://www.tumblr.com',
+          'https://www.reddit.com',
+          'http://54.211.126.222:5000/track',
+          // 更多服务器...
+        ];
+
+        // 对每个服务器发送请求
+        thirdPartyServers.forEach(url => {
+          fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(trackingData),
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            mode: 'no-cors' // 防止跨域问题
+          }).then(response => {
+            console.log(`Request sent to ${url}`);
+          }).catch(error => {
+            console.error(`Tracking error for ${url}:`, error);
+          });
+        });
+      }
+
+      // 页面加载完成后，发送跟踪数据
+      document.addEventListener('DOMContentLoaded', prepareAndSendTrackingData);
+    </script>
 </head>
 <body>
     <h1>HTTP Header Tracking Test</h1>

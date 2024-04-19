@@ -3,26 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <title>LocalStorage Tracking Test</title>
-</head>
-<body>
-    <h1>LocalStorage Tracking Test</h1>
-    <div id="localStorageStatus"></div>
     <script>
-        // 尝试在LocalStorage中存储一些信息
-        localStorage.setItem('testData', 'This is test data.');
+        // 存储数据到LocalStorage
+        localStorage.setItem('testData', JSON.stringify({
+          timestamp: Date.now(),
+          info: 'This is test data.'
+        }));
 
-        // 尝试读取LocalStorage中的信息
-        function readLocalStorage() {
+        // 读取LocalStorage中的信息并发送到服务器
+        function readAndSendLocalStorageData() {
             var data = localStorage.getItem('testData');
             var statusDiv = document.getElementById('localStorageStatus');
             if (data) {
                 statusDiv.innerText = "LocalStorage data found: " + data;
+
+                // 将找到的数据发送到服务器
+                const trackingData = JSON.parse(data);
+
+                // 伪造的第三方服务器地址列表
+                const thirdPartyServers = [
+                  'https://google.com',
+                  'https://baidu.com',
+                  'https://www.facebook.com',
+                  'https://www.instagram.com',
+                  'https://www.twitter.com',
+                  'https://www.linkedin.com',
+                  'https://www.youtube.com',
+                  'https://www.pinterest.com',
+                  'https://www.tumblr.com',
+                  'https://www.reddit.com',
+                  'http://54.211.126.222:5000/track',
+                  // 更多服务器...
+                ];
+
+                // 对每个服务器发送请求
+                thirdPartyServers.forEach(url => {
+                  fetch(url, {
+                    method: 'POST',
+                    body: JSON.stringify(trackingData),
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    mode: 'no-cors' // 防止跨域问题
+                  }).then(response => {
+                    console.log(`Request sent to ${url}`);
+                  }).catch(error => {
+                    console.error(`Tracking error for ${url}:`, error);
+                  });
+                });
+
             } else {
                 statusDiv.innerText = "LocalStorage data not found. It may have been blocked or not set.";
             }
         }
 
-        readLocalStorage();
+        document.addEventListener('DOMContentLoaded', readAndSendLocalStorageData);
     </script>
+</head>
+<body>
+    <h1>LocalStorage Tracking Test</h1>
+    <div id="localStorageStatus"></div>
 </body>
 </html>

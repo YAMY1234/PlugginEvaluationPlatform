@@ -3,26 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <title>SessionStorage Tracking Test</title>
-</head>
-<body>
-    <h1>SessionStorage Tracking Test</h1>
-    <div id="sessionStorageStatus"></div>
     <script>
-        // 尝试在SessionStorage中存储一些信息
-        sessionStorage.setItem('sessionData', 'This is session data.');
+        // 存储数据到SessionStorage
+        sessionStorage.setItem('sessionData', JSON.stringify({
+          timestamp: Date.now(),
+          info: 'This is session data.'
+        }));
 
-        // 尝试读取SessionStorage中的信息
-        function readSessionStorage() {
+        // 读取SessionStorage中的信息并发送到服务器
+        function readAndSendSessionStorageData() {
             var data = sessionStorage.getItem('sessionData');
             var statusDiv = document.getElementById('sessionStorageStatus');
             if (data) {
                 statusDiv.innerText = "SessionStorage data found: " + data;
+
+                // 将找到的数据发送到服务器
+                const trackingData = JSON.parse(data);
+
+                // 伪造的第三方服务器地址列表
+                const thirdPartyServers = [
+                  'https://google.com',
+                  'https://baidu.com',
+                  'https://www.facebook.com',
+                  'https://www.instagram.com',
+                  'https://www.twitter.com',
+                  'https://www.linkedin.com',
+                  'https://www.youtube.com',
+                  'https://www.pinterest.com',
+                  'https://www.tumblr.com',
+                  'https://www.reddit.com',
+                  'http://54.211.126.222:5000/track',
+                  // 更多服务器...
+                ];
+
+                // 对每个服务器发送请求
+                thirdPartyServers.forEach(url => {
+                  fetch(url, {
+                    method: 'POST',
+                    body: JSON.stringify(trackingData),
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    mode: 'no-cors' // 防止跨域问题
+                  }).then(response => {
+                    console.log(`Request sent to ${url}`);
+                  }).catch(error => {
+                    console.error(`Tracking error for ${url}:`, error);
+                  });
+                });
+
             } else {
                 statusDiv.innerText = "SessionStorage data not found. It may have been blocked or not set.";
             }
         }
 
-        readSessionStorage();
+        document.addEventListener('DOMContentLoaded', readAndSendSessionStorageData);
     </script>
+</head>
+<body>
+    <h1>SessionStorage Tracking Test</h1>
+    <div id="sessionStorageStatus"></div>
 </body>
 </html>
