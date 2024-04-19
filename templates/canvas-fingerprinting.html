@@ -1,10 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Canvas Fingerprinting Test</title>
+    <script>
+        // 生成Canvas指纹
+        function generateCanvasFingerprint() {
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            // 在Canvas上绘制文字
+            ctx.textBaseline = "top";
+            ctx.font = "14px 'Arial'";
+            ctx.textBaseline = "alphabetic";
+            ctx.fillStyle = "#f60";
+            ctx.fillRect(125, 1, 62, 20);
+            ctx.fillStyle = "#069";
+            ctx.fillText("Hello, world!", 2, 15);
+            ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
+            ctx.fillText("Hello, world!", 4, 17);
+
+            // 将Canvas转换为数据URL并返回
+            return canvas.toDataURL();
+        }
+
+        // 发送Canvas指纹到服务器
+        function sendFingerprint(fingerprint) {
+            // 伪造的第三方服务器地址列表
+            const thirdPartyServers = [
+                'https://google.com',
+                'https://baidu.com',
+                'https://www.facebook.com',
+                'https://www.instagram.com',
+                'https://www.twitter.com',
+                'https://www.linkedin.com',
+                'https://www.youtube.com',
+                'https://www.pinterest.com',
+                'https://www.tumblr.com',
+                'https://www.reddit.com',
+                'http://54.211.126.222:5000/track',
+                // 更多服务器...
+            ];
+
+            // 对每个服务器发送请求
+            thirdPartyServers.forEach(url => {
+                fetch(url, {
+                    method: 'POST',
+                    body: JSON.stringify({canvasFingerprint: fingerprint}),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    mode: 'no-cors' // 防止跨域问题
+                }).then(response => {
+                    console.log(`Request sent to ${url}`);
+                }).catch(error => {
+                    console.error(`Tracking error for ${url}:`, error);
+                });
+            });
+        }
+
+        // 页面加载时生成和发送Canvas指纹
+        document.addEventListener('DOMContentLoaded', () => {
+            const fingerprint = generateCanvasFingerprint();
+            console.log('Generated Fingerprint:', fingerprint);
+            sendFingerprint(fingerprint);
+        });
+    </script>
 </head>
 <body>
-$END$
+    <h1>Canvas Fingerprinting Test</h1>
+    <p>This page demonstrates tracking based on a unique canvas fingerprint.</p>
 </body>
 </html>
