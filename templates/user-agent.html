@@ -9,38 +9,45 @@
     <p>This page demonstrates the analysis of the User-Agent string to gather information about the device and browser.</p>
     <p>Check the server console for the analyzed User-Agent information.</p>
     <script>
-        // 模拟发送数据到多个服务器
-        function sendTrackingData() {
-          const trackingData = {
-            timestamp: Date.now(),
-            userAgent: navigator.userAgent,
-            // 其他您希望发送的用户信息
-          };
-        
-          // 伪造的第三方服务器地址列表
-          const thirdPartyServers = [
-            'https://google.com',
-            'https://baidu.com',
-            // 更多服务器...
-          ];
-        
-          // 对每个服务器发送请求
-          thirdPartyServers.forEach(url => {
-            fetch(url, {
-              method: 'POST',
-              body: JSON.stringify(trackingData),
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              // 防止跨域问题
-              mode: 'no-cors'
-            }).catch(error => console.error('Tracking error:', error));
+      // 模拟发送数据到多个服务器
+      function sendTrackingData() {
+        const trackingData = {
+          timestamp: Date.now(),
+          userAgent: navigator.userAgent,
+          // 其他您希望发送的用户信息
+        };
+    
+        // 伪造的第三方服务器地址列表
+        const thirdPartyServers = [
+          'https://google.com',
+          'https://baidu.com',
+          // 更多服务器...
+        ];
+    
+        // 对每个服务器发送请求
+        thirdPartyServers.forEach(url => {
+          fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(trackingData),
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            // 防止跨域问题
+            mode: 'no-cors'
+          }).then(response => {
+            // 这里无法读取响应内容，但可以确认请求已发出
+            console.log(`Request sent to ${url}`);
+          }).catch(error => {
+            // 这里捕捉到的错误通常是网络错误或其他导致请求无法发送的问题
+            console.error(`Tracking error for ${url}:`, error);
           });
-        }
-        
-        // 在页面加载时发送跟踪数据
-        document.addEventListener('DOMContentLoaded', sendTrackingData);
+        });
+      }
+    
+      // 在页面加载时发送跟踪数据
+      document.addEventListener('DOMContentLoaded', sendTrackingData);
     </script>
+
 
 </body>
 </html>
