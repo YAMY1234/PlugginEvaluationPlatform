@@ -2,18 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Welcome to Privacy Testing Platform</title>
+    <title>WebSocket Tracking Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+            socket.on('connect', function() {
+                console.log('Connected to server');
+                socket.send('User has connected!');
+            });
+
+            socket.on('message', function(msg) {
+                console.log('Received message: ' + msg);
+            });
+            document.querySelector('#sendButton').addEventListener('click', function() {
+                socket.send('Hello again, server!');
+            });
+        });
+    </script>
 </head>
 <body>
-    <h1>Welcome to the Privacy Testing Platform</h1>
-    <p>This platform is designed to test the effectiveness of privacy preserving plugins.</p>
-    <ul>
-        <li><a href="/cookies">Test Cookies Tracking</a></li>
-        <li><a href="/localstorage">Test Localstorage Tracking</a></li>
-        <li><a href="/sessionstorage">Test Sessionstorage Tracking</a></li>
-        <li><a href="/pixel">Test Pixel Tracking</a></li>
-        <li><a href="/http-header">Test Http-header Tracking</a></li>
-        <li><a href="/user-agent">Test User-agent Tracking</a></li>
-    </ul>
+    <h1>WebSocket Tracking Test Page</h1>
+    <button id="sendButton">Send Message</button>
 </body>
 </html>
