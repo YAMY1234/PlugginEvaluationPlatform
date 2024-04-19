@@ -76,6 +76,7 @@ def track():
     gif_bytes = b'GIF89a\x01\x00\x01\x00\x80\x01\x00\x00\x00\x00\xff\xff\xff!\xf9\x04\x01\x00\x00\x01\x00,\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02L\x01\x00;'
     return send_file(io.BytesIO(gif_bytes), mimetype='image/gif')
 
+#Test
 # @socketio.on('message')
 # def handle_message(msg):
 #     print('Received message:', msg)
